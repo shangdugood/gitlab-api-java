@@ -1,10 +1,9 @@
 package com.css.gitapi.util.controller;
 
 import com.css.gitapi.util.httputil.HttpDeleteWithBody;
-import com.css.gitapi.util.model.GitLabUser;
+import com.css.gitapi.util.model.CreateUserParams;
 import com.css.gitapi.util.model.Global;
 import com.css.gitapi.util.enums.HttpCode;
-import com.css.gitapi.util.enums.Identify;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -28,20 +27,16 @@ import java.util.List;
  * @date 2020/3/31 10:57
  */
 public class UserController {
-    public static String getAllUser(Identify idt) throws Exception {
+    public static String getAllUser(String your_private_token) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users");
-        if (idt == Identify.ADMINISTRATOR) {
-            httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
-        } else {
-            httpGet.addHeader("PRIVATE-TOKEN", Global.regular_private_token);
-        }
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         CloseableHttpResponse response = httpClients.execute(httpGet);
         HttpEntity entity1 = response.getEntity();
         return EntityUtils.toString(entity1);
     }
 
-    public String addUser(GitLabUser user) throws IOException {
+    public String addUser(CreateUserParams user) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users");
         httpPost.addHeader("PRIVATE-TOKEN", Global.root_private_token);
@@ -110,14 +105,10 @@ public class UserController {
         return delUserById(userId, false);
     }
 
-    public String getUserByUserId(Identify idt, String userId) throws IOException {
+    public String getUserByUserId(String your_private_token, String userId) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId);
-        if (idt == Identify.ADMINISTRATOR) {
-            httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
-        } else {
-            httpGet.addHeader("PRIVATE-TOKEN", Global.regular_private_token);
-        }
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         CloseableHttpResponse response = httpClients.execute(httpGet);
         if (response.getStatusLine().getStatusCode() == HttpCode.OK.getCode()) {
             HttpEntity entity1 = response.getEntity();
@@ -127,7 +118,7 @@ public class UserController {
         }
     }
 
-    public String modifyUserById(GitLabUser user, String userId) throws IOException {
+    public String modifyUserById(CreateUserParams user, String userId) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpPut httpPut = new HttpPut("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();

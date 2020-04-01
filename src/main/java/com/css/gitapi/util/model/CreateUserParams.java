@@ -5,7 +5,7 @@ package com.css.gitapi.util.model;
  * @version 1.0
  * @date 2020/3/30 13:30
  */
-public class GitLabUser {
+public class CreateUserParams {
     /**
      * 用户名
      */
@@ -150,7 +150,7 @@ public class GitLabUser {
      */
     Integer theme_id;
 
-    public GitLabUser(String name, String username, String email, String password) {
+    public CreateUserParams(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;

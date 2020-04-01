@@ -5,7 +5,7 @@ package com.css.gitapi.util.model;
  * @version 1.0
  * @date 2020/4/1 11:02
  */
-public class GitLabSingleProParams {
+public class ListSingleProjectParams {
     /**
      * 返回结果是否包含项目的统计信息
      */

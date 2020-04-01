@@ -10,7 +10,7 @@ import com.css.gitapi.util.enums.Visibility;
  * @version 1.0
  * @date 2020/3/31 15:31
  */
-public class GitLabListProParams {
+public class ListProjectParams {
     /**
      * Limit by archived status
      */
@@ -92,7 +92,7 @@ public class GitLabListProParams {
      */
     private Integer id_before;
 
-    public GitLabListProParams() {
+    public ListProjectParams() {
         this.visibility = Visibility.NONE;
         this.order_by = ProListOrderBy.CREATED_TIME;
         this.sort = SortMethod.DESC;

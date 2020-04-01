@@ -1,9 +1,7 @@
 package com.css.gitapi.util.service;
 
-import com.css.gitapi.util.controller.ServerController;
 import com.css.gitapi.util.controller.UserController;
-import com.css.gitapi.util.model.GitLabUser;
-import com.css.gitapi.util.enums.Identify;
+import com.css.gitapi.util.model.CreateUserParams;
 
 import java.io.IOException;
 
@@ -15,36 +13,39 @@ import java.io.IOException;
 public class UserService {
     UserController userController = new UserController();
 
-
-    /**
-     * 测试gitlab服务是否可以连通
-     */
-    public boolean testConnect() throws Exception {
-        ServerController sta = new ServerController();
-        return sta.isConnect();
-    }
-
     /**
      * 获取所有用户
      *
+     * @param your_private_token 需要提供private_token
      * @return 返回用户集合的json
      * @throws Exception
      */
-    public String getAllUsers(Identify idt) throws Exception {
-        return userController.getAllUser(idt);
+    public String getAllUsers(String your_private_token) throws Exception {
+        if (your_private_token != null && !"".equals(your_private_token)) {
+            return userController.getAllUser(your_private_token);
+        } else {
+            return "The your_private_token is required!";
+        }
     }
 
 
     /**
      * 根据userId获取这个用户的信息
      *
-     * @param idt    身份
-     * @param userId 用户ID
+     * @param your_private_token 需要提供private_token
+     * @param userId             用户ID
      * @return
      * @throws IOException
      */
-    public String getUserByUserId(Identify idt, String userId) throws IOException {
-        return userController.getUserByUserId(idt, userId);
+    public String getUserByUserId(String your_private_token, String userId) throws IOException {
+        if (your_private_token == null || "".equals(your_private_token)) {
+            return "The your_private_token is required!";
+        } else if (userId == null && "".equals(userId)) {
+            return "The userId is required!";
+        } else{
+            return userController.getUserByUserId(your_private_token, userId);
+        }
+
     }
 
 
@@ -53,7 +54,7 @@ public class UserService {
      *
      * @return 返回创建好的用户信息
      */
-    public String addUser(GitLabUser user) throws IOException {
+    public String addUser(CreateUserParams user) throws IOException {
         return userController.addUser(user);
     }
 
@@ -65,7 +66,12 @@ public class UserService {
      * @throws Exception
      */
     public boolean delUserByUserId(String userId) throws Exception {
-        return userController.delUserById(userId);
+        if (userId != null && !"".equals(userId)) {
+            return userController.delUserById(userId);
+        } else {
+            return false;
+        }
+
     }
 
     /**
@@ -77,7 +83,12 @@ public class UserService {
      * @throws Exception
      */
     public boolean delUserByUserId(String userId, boolean hard_delete) throws Exception {
-        return userController.delUserById(userId, hard_delete);
+        if (userId != null && !"".equals(userId)) {
+            return userController.delUserById(userId, hard_delete);
+        } else {
+            return false;
+        }
+
     }
 
     /**
@@ -88,8 +99,13 @@ public class UserService {
      * @return 返回修改后的结果
      * @throws Exception
      */
-    public String modifyUserByUserId(GitLabUser user, String userId) throws Exception {
-        return userController.modifyUserById(user, userId);
+    public String modifyUserByUserId(CreateUserParams user, String userId) throws Exception {
+        if (userId != null && !"".equals(userId)) {
+            return userController.modifyUserById(user, userId);
+        } else {
+            return "The userId is required!";
+        }
+
     }
 
     /**
@@ -100,7 +116,12 @@ public class UserService {
      * @return
      */
     public boolean DeleteAuthenticationIdentityFromUser(String userId, String provider) throws Exception {
-        return userController.deleteAuthenticationIdentityFromUser(userId, provider);
+        if (userId != null && !"".equals(userId) && provider != null && !"".equals(provider)) {
+            return userController.deleteAuthenticationIdentityFromUser(userId, provider);
+        } else {
+            System.out.println("The userId and provider are required!");
+            return false;
+        }
     }
 
 }

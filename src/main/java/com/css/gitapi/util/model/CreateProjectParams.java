@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/3/31 14:34
  */
-public class GitLabPro {
+public class CreateProjectParams {
     /**
      *项目名称
      * is required if path is not provided
@@ -171,10 +171,12 @@ public class GitLabPro {
     private boolean mirror_trigger_builds;
     /**
      * false by default
+     * (Only Create Project Used)
      */
     private boolean initialize_with_readme;
     /**
      * 是否启用临时名称
+     * (Only Create Project Used)
      */
     private boolean use_custom_template;
     /**
@@ -185,12 +187,14 @@ public class GitLabPro {
     /**
      * When used with use_custom_template, project ID of a custom project template.
      * This is preferable to using template_name since template_name may be ambiguous.
+     * (Only Create Project Used)
      */
     private Integer template_project_id;
     /**
      * For group-level custom templates, specifies ID of group from which all the custom project templates are sourced.
      * Leave empty for instance-level templates.
      * Requires use_custom_template to be true
+     * (Only Create Project Used)
      */
     private Integer group_with_project_templates_id;
     /**
@@ -198,7 +202,40 @@ public class GitLabPro {
      */
     boolean packages_enabled;
 
-    public GitLabPro(String name, String path) {
+    /**
+     * The commit message used to apply merge request suggestions
+     * (Only Modify Project Used)
+     */
+    String suggestion_commit_message;
+    /**
+     * Default number of revisions for shallow cloning
+     * (Only Modify Project Used)
+     */
+    Integer ci_default_git_depth;
+    /**
+     * (STARTER) User responsible for all the activity surrounding a pull mirror event
+     * (Only Modify Project Used)
+     */
+    Integer mirror_user_id;
+    /**
+     * (STARTER) Only mirror protected branches
+     * (Only Modify Project Used)
+     */
+    boolean only_mirror_protected_branches;
+    /**
+     * (STARTER) Pull mirror overwrites diverged branches
+     * (Only Modify Project Used)
+     */
+    boolean mirror_overwrites_diverged_branches;
+    /**
+     * (PREMIUM ONLY) Enable or disable service desk feature
+     * (Only Modify Project Used)
+     */
+    boolean service_desk_enabled;
+
+
+
+    public CreateProjectParams(String name, String path) {
         this.name = name;
         this.path = path;
     }
@@ -389,6 +426,30 @@ public class GitLabPro {
 
     public boolean isPackages_enabled() {
         return packages_enabled;
+    }
+
+    public String getSuggestion_commit_message() {
+        return suggestion_commit_message;
+    }
+
+    public Integer getCi_default_git_depth() {
+        return ci_default_git_depth;
+    }
+
+    public Integer getMirror_user_id() {
+        return mirror_user_id;
+    }
+
+    public boolean isOnly_mirror_protected_branches() {
+        return only_mirror_protected_branches;
+    }
+
+    public boolean isMirror_overwrites_diverged_branches() {
+        return mirror_overwrites_diverged_branches;
+    }
+
+    public boolean isService_desk_enabled() {
+        return service_desk_enabled;
     }
 
     public void setName(String name) {
@@ -598,5 +659,29 @@ public class GitLabPro {
 
     public void setPackages_enabled(boolean packages_enabled) {
         this.packages_enabled = packages_enabled;
+    }
+
+    public void setSuggestion_commit_message(String suggestion_commit_message) {
+        this.suggestion_commit_message = suggestion_commit_message;
+    }
+
+    public void setCi_default_git_depth(Integer ci_default_git_depth) {
+        this.ci_default_git_depth = ci_default_git_depth;
+    }
+
+    public void setMirror_user_id(Integer mirror_user_id) {
+        this.mirror_user_id = mirror_user_id;
+    }
+
+    public void setOnly_mirror_protected_branches(boolean only_mirror_protected_branches) {
+        this.only_mirror_protected_branches = only_mirror_protected_branches;
+    }
+
+    public void setMirror_overwrites_diverged_branches(boolean mirror_overwrites_diverged_branches) {
+        this.mirror_overwrites_diverged_branches = mirror_overwrites_diverged_branches;
+    }
+
+    public void setService_desk_enabled(boolean service_desk_enabled) {
+        this.service_desk_enabled = service_desk_enabled;
     }
 }

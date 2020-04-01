@@ -5,8 +5,8 @@
  */
 
 import com.css.gitapi.util.controller.UserController;
-import com.css.gitapi.util.model.GitLabUser;
-import com.css.gitapi.util.enums.Identify;
+import com.css.gitapi.util.model.CreateUserParams;
+import com.css.gitapi.util.model.Global;
 import org.junit.Test;
 
 
@@ -15,17 +15,17 @@ public class TestUsers {
 
     @Test
     public void testGetAllUserByAdministrator() throws Exception {
-        System.out.println(userController.getAllUser(Identify.ADMINISTRATOR));
+        System.out.println(userController.getAllUser(Global.root_private_token));
     }
 
     @Test
     public void testGetAllUserByRegularAccount() throws Exception {
-        System.out.println(userController.getAllUser(Identify.REGUALRACCOUNT));
+        System.out.println(userController.getAllUser(Global.regular_private_token));
     }
 
     @Test
     public void testAddUser() throws Exception {
-        GitLabUser gitLabUser = new GitLabUser("测试2", "test2", "test999@css.com.cn", "12345678");
+        CreateUserParams gitLabUser = new CreateUserParams("测试2", "test2", "test999@css.com.cn", "12345678");
         gitLabUser.setLinkedin("www.baidu.com");
         System.out.println(userController.addUser(gitLabUser));
     }
@@ -37,7 +37,7 @@ public class TestUsers {
 
     @Test
     public void testModUser() throws Exception {
-        GitLabUser gitLabUser = new GitLabUser("测试66611", "test8888", "test1010@css.com.cn", null);
+        CreateUserParams gitLabUser = new CreateUserParams("测试66611", "test8888", "test1010@css.com.cn", null);
         gitLabUser.setLinkedin("www.sina.com");
         System.out.println(userController.modifyUserById(gitLabUser, "21"));
     }
