@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="git-api-demo" target="1.5" />
+      <module name="git-api-demo" target="6" />
     </bytecodeTargetLevel>
   </component>
 </project>

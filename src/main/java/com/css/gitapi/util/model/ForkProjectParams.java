@@ -7,7 +7,7 @@ package com.css.gitapi.util.model;
  */
 public class ForkProjectParams {
     /**
-     * The ID or URL-encoded path of the project
+     * 项目ID或者项目的URL路径
      * (required)
      */
     private String id;

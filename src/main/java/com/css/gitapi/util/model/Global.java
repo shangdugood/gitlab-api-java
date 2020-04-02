@@ -1,7 +1,8 @@
 package com.css.gitapi.util.model;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.css.gitapi.util.enums.ProListOrderBy;
+
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -14,12 +15,13 @@ public class Global {
     public static String gitPort;
     public static String root_private_token;
     public static String regular_private_token;
-
+    private static Properties pro;
     static {
-        InputStream in = Global.class.getResourceAsStream("/config.properties");
-        Properties pro = new Properties();
+        InputStream inputStream = Global.class.getResourceAsStream("/config.properties");
+        BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream));
         try {
-            pro.load(in);
+            pro = new Properties();
+            pro.load(bf);
             gitIP = pro.getProperty("ip");
             gitPort = pro.getProperty("port");
             root_private_token = pro.getProperty("root_private_token");
@@ -28,5 +30,9 @@ public class Global {
             e.printStackTrace();
         }
 
+    }
+
+    public static String getPorpties(String key) throws UnsupportedEncodingException {
+        return (String) pro.get(key);
     }
 }

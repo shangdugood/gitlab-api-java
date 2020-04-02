@@ -7,7 +7,10 @@ package com.css.gitapi.util.enums;
  */
 public enum HttpCode {
 
-    OK(200, "成功"), DELETESUCCESS(204, "删除成功"), CREATED(201, "创建成功"),
+    OK(200, "成功"),
+    DELETESUCCESS(204, "删除成功"),
+    MARKEDDELETE(202, "已标记为删除"),
+    CREATED(201, "创建成功"),
     NOTMODIFIED(304, "请求的资源未被修改"),
     BADREQUEST(400, "参数不全"),
     UNAUTHORIZED(401, "无权访问"),

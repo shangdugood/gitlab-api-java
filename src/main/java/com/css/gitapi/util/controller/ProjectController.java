@@ -1,5 +1,8 @@
 package com.css.gitapi.util.controller;
 
+import com.css.gitapi.util.enums.HttpCode;
+import com.css.gitapi.util.enums.UserAccessLevel;
+import com.css.gitapi.util.httputil.HttpDeleteWithBody;
 import com.css.gitapi.util.httputil.HttpGetWithBody;
 import com.css.gitapi.util.model.*;
 import org.apache.http.Consts;
@@ -7,6 +10,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -14,7 +18,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,10 +30,10 @@ import java.util.List;
  * @date 2020/3/31 11:10
  */
 public class ProjectController {
-    public String getAllProjects(ListProjectParams params) throws Exception {
+    public String getAllProjects(ListProjectParams params, String your_private_token) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects");
-        httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("archived", String.valueOf(params.isArchived())));
         formparams.add(new BasicNameValuePair("order_by", params.getOrder_by().getDesc()));
@@ -64,10 +70,10 @@ public class ProjectController {
         return EntityUtils.toString(entity1);
     }
 
-    public String getUserProjects(String userId, ListProjectParams params) throws Exception {
+    public String getUserProjects(String userId, String your_private_token, ListProjectParams params) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId + "/projects");
-        httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("user_id", userId));
         formparams.add(new BasicNameValuePair("archived", String.valueOf(params.isArchived())));
@@ -105,10 +111,10 @@ public class ProjectController {
         return EntityUtils.toString(entity1);
     }
 
-    public String getUserStarredProjects(String userId, ListProjectParams params) throws Exception {
+    public String getUserStarredProjects(String userId, String your_private_token, ListProjectParams params) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId + "/starred_projects");
-        httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("user_id", userId));
         formparams.add(new BasicNameValuePair("archived", String.valueOf(params.isArchived())));
@@ -139,17 +145,16 @@ public class ProjectController {
             formparams.add(new BasicNameValuePair("id_before", String.valueOf(params.getId_before())));
         }
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
-
         httpGet.setEntity(entity);
         CloseableHttpResponse response = httpClients.execute(httpGet);
         HttpEntity entity1 = response.getEntity();
         return EntityUtils.toString(entity1);
     }
 
-    public String getProjectById(String projectId, ListSingleProjectParams params) throws Exception {
+    public String getProjectById(String projectId, String your_private_token, ListSingleProjectParams params) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId);
-        httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("id", projectId));
         formparams.add(new BasicNameValuePair("statistics", String.valueOf(params.isStatistics())));
@@ -162,10 +167,10 @@ public class ProjectController {
         return EntityUtils.toString(entity1);
     }
 
-    public String getProjectUsers(String projectId, String search, int[] skip_users_id) throws Exception {
+    public String getProjectUsers(String projectId, String your_private_token, String search, int[] skip_users_id) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/users");
-        httpGet.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         if (!"".equals(search)) {
             formparams.add(new BasicNameValuePair("search", search));
@@ -186,7 +191,6 @@ public class ProjectController {
         HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects");
         httpPost.addHeader("PRIVATE-TOKEN", creator_private_token);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-
         params.add(new BasicNameValuePair("name", project.getName()));
         params.add(new BasicNameValuePair("path", project.getPath()));
         params.add(new BasicNameValuePair("description", project.getDescription()));
@@ -289,10 +293,10 @@ public class ProjectController {
 
     }
 
-    public String createProjectForUser(CreateProjectParams project, String userId) throws Exception {
+    public String createProjectForUser(CreateProjectParams project, String root_private_token, String userId) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/user/" + userId);
-        httpPost.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpPost.addHeader("PRIVATE-TOKEN", root_private_token);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("name", project.getName()));
@@ -519,16 +523,16 @@ public class ProjectController {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("id", project.getId()));
-        if(project.getNamespace_id() != null){
+        if (project.getNamespace_id() != null) {
             params.add(new BasicNameValuePair("namespace_id", project.getNamespace_id().toString()));
         }
-        if(project.getNamespace_path() != null && !"".equals(project.getNamespace_path())){
+        if (project.getNamespace_path() != null && !"".equals(project.getNamespace_path())) {
             params.add(new BasicNameValuePair("namespace_path", project.getNamespace_path()));
         }
-        if(project.getPath() != null && !"".equals(project.getPath())){
+        if (project.getPath() != null && !"".equals(project.getPath())) {
             params.add(new BasicNameValuePair("path", project.getPath()));
         }
-        if(project.getName() != null && !"".equals(project.getName())){
+        if (project.getName() != null && !"".equals(project.getName())) {
             params.add(new BasicNameValuePair("name", project.getName()));
         }
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
@@ -539,27 +543,27 @@ public class ProjectController {
     }
 
 
-    public String getProjectForks(String your_private_token,ListForkProjectParams project) throws Exception{
+    public String getProjectForks(String your_private_token, ListForkProjectParams project) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + project.getId() + "/forks");
         httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("id", project.getId()));
-        if(project.getVisibility() != null){
+        if (project.getVisibility() != null) {
             params.add(new BasicNameValuePair("visibility", project.getVisibility().getDesc()));
         }
-        if(project.getOrder_by() != null){
+        if (project.getOrder_by() != null) {
             params.add(new BasicNameValuePair("order_by", project.getOrder_by().getDesc()));
         }
-        if(project.getSort() != null){
+        if (project.getSort() != null) {
             params.add(new BasicNameValuePair("sort", project.getSort().toString()));
         }
-        if(project.getSearch() != null && !"".equals(project.getSearch())){
+        if (project.getSearch() != null && !"".equals(project.getSearch())) {
             params.add(new BasicNameValuePair("sort", project.getSearch()));
         }
-        if(project.getMin_access_level() != null){
-            params.add(new BasicNameValuePair("min_access_level",project.getMin_access_level().getLevel().toString()));
+        if (project.getMin_access_level() != null) {
+            params.add(new BasicNameValuePair("min_access_level", project.getMin_access_level().getLevel().toString()));
         }
         params.add(new BasicNameValuePair("archived", String.valueOf(project.isArchived())));
         params.add(new BasicNameValuePair("simple", String.valueOf(project.isSimple())));
@@ -576,4 +580,280 @@ public class ProjectController {
         HttpEntity entity1 = response.getEntity();
         return EntityUtils.toString(entity1);
     }
+
+
+    public String starProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/star");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        if (response.getStatusLine().getStatusCode() == HttpCode.NOTMODIFIED.getCode()) {
+            return Global.getPorpties("isStarted");
+        } else {
+            HttpEntity entity1 = response.getEntity();
+            return EntityUtils.toString(entity1);
+        }
+    }
+
+    public String unStarProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/unstar");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        if (response.getStatusLine().getStatusCode() == HttpCode.NOTMODIFIED.getCode()) {
+            return Global.getPorpties("isUnStarted");
+        } else {
+            HttpEntity entity1 = response.getEntity();
+            return EntityUtils.toString(entity1);
+        }
+    }
+
+    public String getProjectStarrers(String your_private_token, String projectId, String searchCondition) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/starrers");
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        if (searchCondition != null && !"".equals(searchCondition)) {
+            params.add(new BasicNameValuePair("search", searchCondition));
+        }
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpGet.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpGet);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String getLanguagesPercentage(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/languages");
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
+        CloseableHttpResponse response = httpClients.execute(httpGet);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String archiveProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/archive");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+
+    }
+
+    public String unArchiveProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/unarchive");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+
+    }
+
+    public String delProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId);
+        httpDelete.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+
+        httpDelete.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpDelete);
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return HttpCode.DELETESUCCESS.getDescription();
+        } else if (response.getStatusLine().getStatusCode() == HttpCode.MARKEDDELETE.getCode()) {
+            return HttpCode.MARKEDDELETE.getDescription();
+        } else {
+            return EntityUtils.toString(response.getEntity());
+        }
+    }
+
+    public String restoreProject(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/restore");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        return EntityUtils.toString(response.getEntity());
+    }
+
+    public String uploadFileToProject(String your_private_token, String projectId, String filePath) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/uploads");
+        httpPost.addHeader("Content-Type", "multipart/form-data");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("file", "@" + filePath));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        return EntityUtils.toString(response.getEntity());
+    }
+
+    public String shareProjectWithGroup(String your_private_token, String projectId, Integer group_id, UserAccessLevel group_access, Date expires_at) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/share");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("group_id", group_id.toString()));
+        params.add(new BasicNameValuePair("group_access", group_access.getLevel().toString()));
+        if (expires_at != null) {
+            params.add(new BasicNameValuePair("expires_at", new SimpleDateFormat("yyyy-MM-dd").format(expires_at)));
+        }
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        return EntityUtils.toString(response.getEntity());
+    }
+
+    public String stopShareProjectWithGroup(String your_private_token, String projectId, Integer groupId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/share/" + groupId);
+        httpDelete.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("group_id", groupId.toString()));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+
+        httpDelete.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpDelete);
+
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return Global.getPorpties("stopShareSuccess");
+        } else if (response.getEntity() != null) {
+            return EntityUtils.toString(response.getEntity());
+        } else {
+            return response.getStatusLine().getStatusCode() + ".";
+        }
+    }
+
+    public String getProjectHooks(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/hooks");
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpGet.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpGet);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String getProjectHook(String your_private_token, String projectId, Integer hook_id) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/hooks/" + hook_id);
+        httpGet.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("hook_id", hook_id.toString()));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpGet.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpGet);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String addProjectHook(String your_private_token, CreateProjectHookParams hook) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + hook.getId() + "/hooks");
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", hook.getId()));
+        params.add(new BasicNameValuePair("url", hook.getUrl()));
+        params.add(new BasicNameValuePair("push_events", String.valueOf(hook.isPush_events())));
+        params.add(new BasicNameValuePair("issues_events", String.valueOf(hook.isIssues_events())));
+        params.add(new BasicNameValuePair("confidential_issues_events", String.valueOf(hook.isConfidential_issues_events())));
+        params.add(new BasicNameValuePair("merge_requests_events", String.valueOf(hook.isMerge_requests_events())));
+        params.add(new BasicNameValuePair("tag_push_events", String.valueOf(hook.isTag_push_events())));
+        params.add(new BasicNameValuePair("note_events", String.valueOf(hook.isNote_events())));
+        params.add(new BasicNameValuePair("job_events", String.valueOf(hook.isJob_events())));
+        params.add(new BasicNameValuePair("pipeline_events", String.valueOf(hook.isPipeline_events())));
+        params.add(new BasicNameValuePair("wiki_page_events", String.valueOf(hook.isWiki_page_events())));
+        params.add(new BasicNameValuePair("enable_ssl_verification", String.valueOf(hook.isEnable_ssl_verification())));
+        if (hook.getPush_events_branch_filter() != null && !"".equals(hook.getPush_events_branch_filter())) {
+            params.add(new BasicNameValuePair("push_events_branch_filter", hook.getPush_events_branch_filter()));
+        }
+        if (hook.getToken() != null && !"".equals(hook.getToken())) {
+            params.add(new BasicNameValuePair("token", hook.getToken()));
+        }
+
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String modifyProjectHook(String your_private_token, Integer hook_id, CreateProjectHookParams hook) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPut httpPut = new HttpPut("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + hook.getId() + "/hooks/" + hook_id);
+        httpPut.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", hook.getId()));
+        params.add(new BasicNameValuePair("hook_id", hook_id.toString()));
+        params.add(new BasicNameValuePair("url", hook.getUrl()));
+        params.add(new BasicNameValuePair("push_events", String.valueOf(hook.isPush_events())));
+        params.add(new BasicNameValuePair("issues_events", String.valueOf(hook.isIssues_events())));
+        params.add(new BasicNameValuePair("confidential_issues_events", String.valueOf(hook.isConfidential_issues_events())));
+        params.add(new BasicNameValuePair("merge_requests_events", String.valueOf(hook.isMerge_requests_events())));
+        params.add(new BasicNameValuePair("tag_push_events", String.valueOf(hook.isTag_push_events())));
+        params.add(new BasicNameValuePair("note_events", String.valueOf(hook.isNote_events())));
+        params.add(new BasicNameValuePair("job_events", String.valueOf(hook.isJob_events())));
+        params.add(new BasicNameValuePair("pipeline_events", String.valueOf(hook.isPipeline_events())));
+        params.add(new BasicNameValuePair("wiki_page_events", String.valueOf(hook.isWiki_page_events())));
+        params.add(new BasicNameValuePair("enable_ssl_verification", String.valueOf(hook.isEnable_ssl_verification())));
+        if (hook.getPush_events_branch_filter() != null && !"".equals(hook.getPush_events_branch_filter())) {
+            params.add(new BasicNameValuePair("push_events_branch_filter", hook.getPush_events_branch_filter()));
+        }
+        if (hook.getToken() != null && !"".equals(hook.getToken())) {
+            params.add(new BasicNameValuePair("token", hook.getToken()));
+        }
+
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpPut.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPut);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String delProjectHook(String your_private_token, String projectId, Integer hook_id) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/hooks/" + hook_id);
+        httpDelete.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("hook_id", hook_id.toString()));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpDelete.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpDelete);
+
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return Global.getPorpties("delProHookSuccess");
+        } else if (response.getEntity() != null) {
+            return EntityUtils.toString(response.getEntity());
+        } else {
+            return response.getStatusLine().getStatusCode() + ".";
+        }
+    }
+
 }

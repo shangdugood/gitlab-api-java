@@ -12,7 +12,7 @@ import com.css.gitapi.util.enums.Visibility;
  */
 public class ListForkProjectParams {
     /**
-     * 项目ID
+     * 项目ID或项目的URL路径
      * (required)
      */
     private String id;

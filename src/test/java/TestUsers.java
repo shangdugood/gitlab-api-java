@@ -27,24 +27,24 @@ public class TestUsers {
     public void testAddUser() throws Exception {
         CreateUserParams gitLabUser = new CreateUserParams("测试2", "test2", "test999@css.com.cn", "12345678");
         gitLabUser.setLinkedin("www.baidu.com");
-        System.out.println(userController.addUser(gitLabUser));
+        System.out.println(userController.addUser(gitLabUser, Global.root_private_token));
     }
 
     @Test
     public void testDelUser() throws Exception {
-        System.out.println(userController.delUserById("20"));
+        System.out.println(userController.delUserById("20", Global.root_private_token, false));
     }
 
     @Test
     public void testModUser() throws Exception {
         CreateUserParams gitLabUser = new CreateUserParams("测试66611", "test8888", "test1010@css.com.cn", null);
         gitLabUser.setLinkedin("www.sina.com");
-        System.out.println(userController.modifyUserById(gitLabUser, "21"));
+        System.out.println(userController.modifyUserById(gitLabUser, "21", Global.root_private_token));
     }
 
 
     @Test
     public void testDeleteAuthenticationIdentityFromUser() throws Exception {
-        System.out.println(userController.deleteAuthenticationIdentityFromUser("19", "root"));
+        System.out.println(userController.deleteAuthenticationIdentityFromUser("19", "root", Global.root_private_token));
     }
 }

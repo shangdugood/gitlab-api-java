@@ -1,9 +1,9 @@
 package com.css.gitapi.util.controller;
 
+import com.css.gitapi.util.enums.HttpCode;
 import com.css.gitapi.util.httputil.HttpDeleteWithBody;
 import com.css.gitapi.util.model.CreateUserParams;
 import com.css.gitapi.util.model.Global;
-import com.css.gitapi.util.enums.HttpCode;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -36,10 +36,10 @@ public class UserController {
         return EntityUtils.toString(entity1);
     }
 
-    public String addUser(CreateUserParams user) throws IOException {
+    public String addUser(CreateUserParams user, String root_private_token) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users");
-        httpPost.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpPost.addHeader("PRIVATE-TOKEN", root_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("password", user.getPassword()));
         formparams.add(new BasicNameValuePair("email", user.getEmail()));
@@ -81,11 +81,11 @@ public class UserController {
         }
     }
 
-    public boolean delUserById(String userId, boolean hard_delete) throws IOException {
+    public boolean delUserById(String userId, String root_private_token, boolean hard_delete) throws IOException {
 
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId);
-        httpDelete.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpDelete.addHeader("PRIVATE-TOKEN", root_private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
         formparams.add(new BasicNameValuePair("id", userId));
         formparams.add(new BasicNameValuePair("hard_delete", String.valueOf(hard_delete)));
@@ -101,10 +101,6 @@ public class UserController {
 
     }
 
-    public boolean delUserById(String userId) throws IOException {
-        return delUserById(userId, false);
-    }
-
     public String getUserByUserId(String your_private_token, String userId) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId);
@@ -118,11 +114,11 @@ public class UserController {
         }
     }
 
-    public String modifyUserById(CreateUserParams user, String userId) throws IOException {
+    public String modifyUserById(CreateUserParams user, String userId, String root_private_token) throws IOException {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpPut httpPut = new HttpPut("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-        httpPut.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpPut.addHeader("PRIVATE-TOKEN", root_private_token);
         formparams.add(new BasicNameValuePair("id", userId));
         formparams.add(new BasicNameValuePair("password", user.getPassword()));
         formparams.add(new BasicNameValuePair("email", user.getEmail()));
@@ -159,10 +155,10 @@ public class UserController {
     }
 
 
-    public boolean deleteAuthenticationIdentityFromUser(String userId, String provider) throws Exception {
+    public boolean deleteAuthenticationIdentityFromUser(String userId, String provider, String root_private_token) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users/" + userId + "/identities/" + provider);
-        httpDelete.addHeader("PRIVATE-TOKEN", Global.root_private_token);
+        httpDelete.addHeader("PRIVATE-TOKEN", root_private_token);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("id", userId));
         params.add(new BasicNameValuePair("provider", provider));
