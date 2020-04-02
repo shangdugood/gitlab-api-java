@@ -856,4 +856,36 @@ public class ProjectController {
         }
     }
 
+    public String createForkBetweenExistProject(String your_private_token, String projectId, Integer forked_from_id) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/fork/" + forked_from_id);
+        httpPost.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        params.add(new BasicNameValuePair("forked_from_id", forked_from_id.toString()));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpPost);
+        HttpEntity entity1 = response.getEntity();
+        return EntityUtils.toString(entity1);
+    }
+
+    public String delExistFork(String your_private_token, String projectId) throws Exception {
+        CloseableHttpClient httpClients = HttpClients.createDefault();
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/fork");
+        httpDelete.addHeader("PRIVATE-TOKEN", your_private_token);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id", projectId));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        httpDelete.setEntity(entity);
+        CloseableHttpResponse response = httpClients.execute(httpDelete);
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return Global.getPorpties("delProForkSuccess");
+        } else if (response.getEntity() != null) {
+            return EntityUtils.toString(response.getEntity());
+        } else {
+            return response.getStatusLine().getStatusCode() + ".";
+        }
+    }
+
 }

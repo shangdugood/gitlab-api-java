@@ -173,4 +173,15 @@ public class TestProject {
     public void testDelProjectHook() throws Exception {
         System.out.println(projectController.delProjectHook(Global.root_private_token, "5", 22));
     }
+
+    @Test
+    public void testCreateForkBetweenExistProject() throws Exception {
+        System.out.println(projectController.createForkBetweenExistProject(Global.regular_private_token, "22", 22));
+    }
+
+    @Test
+    public void testDelExistFork() throws Exception {
+        System.out.println(projectController.delExistFork(Global.regular_private_token, "22"));
+    }
 }
+

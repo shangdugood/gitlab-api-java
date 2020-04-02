@@ -16,6 +16,46 @@ public class ProjectService {
 
 
     /**
+     * 删除项目的fork
+     *
+     * @param your_private_token 管理员或者项目创建者的private_token
+     * @param projectId          项目的ID或者URL路径
+     * @return 返回删除结果
+     * @throws Exception
+     */
+    public String delExistProjectFork(String your_private_token, String projectId) throws Exception {
+        if (your_private_token == null || "".equals(your_private_token)) {
+            return "Your private_token is required!";
+        } else if (projectId == null || "".equals(projectId)) {
+            return "The projectId is required!";
+        } else {
+            return projectController.delExistFork(your_private_token, projectId);
+        }
+    }
+
+
+    /**
+     * 将一个项目fork到另一个项目
+     *
+     * @param your_private_token 管理员或者新项目的private_token
+     * @param projectId          新项目的ID或者URL路径
+     * @param fork_from_id       fork的项目的ID
+     * @return 返回新的项目的信息
+     * @throws Exception
+     */
+    public String createForkBetweenExistProjects(String your_private_token, String projectId, Integer fork_from_id) throws Exception {
+        if (your_private_token == null || "".equals(your_private_token)) {
+            return "Your private_token is required!";
+        } else if (fork_from_id == null) {
+            return "The fork_from_id is required!";
+        } else if (projectId == null || "".equals(projectId)) {
+            return "The projectId is required!";
+        } else {
+            return projectController.createForkBetweenExistProject(your_private_token, projectId, fork_from_id);
+        }
+    }
+
+    /**
      * 删除项目的hook
      *
      * @param your_private_token 管理员或者项目创建者的private_token
