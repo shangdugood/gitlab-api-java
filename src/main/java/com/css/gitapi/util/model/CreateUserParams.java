@@ -66,7 +66,7 @@ public class CreateUserParams {
     String bio;
 
     /**
-     * 用户的配色方案，智能选择以下几个
+     * 用户的配色方案，只能选择以下几个
      * 1、White
      * 2、Dark
      * 3、Solarized light
@@ -88,7 +88,7 @@ public class CreateUserParams {
     /**
      * force_random_password 设置一个随机密码
      */
-    String force_random_password;
+    boolean force_random_password;
 
     /**
      * group_id_for_saml
@@ -168,7 +168,7 @@ public class CreateUserParams {
         this.color_scheme_id = 1;
         this.extern_uid = "";
         this.extra_shared_runners_minutes_limit = "";
-        this.force_random_password = "";
+        this.force_random_password = false;
         this.group_id_for_saml = "";
         this.location = null;
         this.organization = null;
@@ -301,11 +301,11 @@ public class CreateUserParams {
         this.extra_shared_runners_minutes_limit = extra_shared_runners_minutes_limit;
     }
 
-    public String getForce_random_password() {
+    public boolean getForce_random_password() {
         return force_random_password;
     }
 
-    public void setForce_random_password(String force_random_password) {
+    public void setForce_random_password(boolean force_random_password) {
         this.force_random_password = force_random_password;
     }
 

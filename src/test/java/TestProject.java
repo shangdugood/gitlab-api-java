@@ -1,4 +1,6 @@
 import com.css.gitapi.util.controller.ProjectController;
+import com.css.gitapi.util.enums.ProListOrderBy;
+import com.css.gitapi.util.enums.SortMethod;
 import com.css.gitapi.util.enums.UserAccessLevel;
 import com.css.gitapi.util.model.*;
 import org.junit.Test;
@@ -40,7 +42,7 @@ public class TestProject {
 
     @Test
     public void testCreateProject() throws Exception {
-        CreateProjectParams project = new CreateProjectParams("", "");
+        CreateProjectParams project = new CreateProjectParams("abcdefg", "");
         if ("".equals(project.getName()) && "".equals(project.getPath())) {
             System.out.println("The path and name of the project provide at least one!");
             return;
@@ -182,6 +184,51 @@ public class TestProject {
     @Test
     public void testDelExistFork() throws Exception {
         System.out.println(projectController.delExistFork(Global.regular_private_token, "22"));
+    }
+
+    @Test
+    public void testSearchProByName() throws Exception {
+        System.out.println(projectController.searchProjectByName(Global.root_private_token, "efg", ProListOrderBy.CREATED_TIME, SortMethod.ASC));
+    }
+
+    @Test
+    public void testHouseKeepingProject() throws Exception {
+        System.out.println(projectController.houseKeepingProject(Global.root_private_token, "7"));
+    }
+
+    @Test
+    public void testGetProjectPushRules() throws Exception {
+        System.out.println(projectController.getProjectPushRules(Global.root_private_token, "abcdefg"));
+    }
+
+    @Test
+    public void testAddProjectPushRules() throws Exception {
+        AddProjectPushRuleParams project = new AddProjectPushRuleParams("2");
+        project.setAuthor_email_regex("@css.com.cn$");
+        System.out.println(projectController.addProjectPushRules(Global.root_private_token, project));
+    }
+
+    @Test
+    public void testModProjectPushRules() throws Exception {
+        AddProjectPushRuleParams project = new AddProjectPushRuleParams("2");
+        project.setAuthor_email_regex("@css.com.cn$");
+        System.out.println(projectController.modProjectPushRules(Global.root_private_token, project));
+    }
+
+    @Test
+    public void testDelProjectPushRules() throws Exception {
+        System.out.println(projectController.delProjectPushRules(Global.root_private_token, "9"));
+    }
+
+    @Test
+    public void testTranserProjectToNewNamespace() throws Exception {
+        System.out.println(projectController.transferProjectToNewNamespace(Global.root_private_token, "9", "8"));
+    }
+
+
+    @Test
+    public void testDownloadSnapshot() throws Exception {
+        System.out.println(projectController.downloadSnapshot(Global.regular_private_token, "7", false));
     }
 }
 
