@@ -69,15 +69,25 @@ public class ListForkProjectParams {
      */
     private boolean with_issues_enabled;
     /**
-     *
-     Limit by enabled merge requests feature
+     * Limit by enabled merge requests feature
      */
     private boolean with_merge_requests_enabled;
     /**
      * Limit by current user minimal access level
      */
     private UserAccessLevel min_access_level;
+    /**
+     * 分页信息，可选，默认为page=1,per_page=20;
+     */
+    private Pagination pagination;
 
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
+    }
 
     public ListForkProjectParams(String id) {
         this.id = id;

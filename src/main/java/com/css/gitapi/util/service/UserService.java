@@ -6,6 +6,7 @@ import com.css.gitapi.util.enums.ImpersonationTokenState;
 import com.css.gitapi.util.enums.UserMembershipsType;
 import com.css.gitapi.util.model.CreateUserParams;
 import com.css.gitapi.util.model.Global;
+import com.css.gitapi.util.model.Pagination;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -789,11 +790,12 @@ public class UserService {
      * Administrator gets currently authenticated user.
      *
      * @param root_private_token Administrator's private_token
+     * @param pagination         分页信息，可以为null，默认page=1,per_page=20
      * @return 用户信息
      * @throws Exception
      */
-    public String getCurrentUserForAdmin(String root_private_token) throws Exception {
-        return getCurrentUserForAdmin(root_private_token, "");
+    public String getCurrentUserForAdmin(String root_private_token, Pagination pagination) throws Exception {
+        return getCurrentUserForAdmin(root_private_token, "", pagination);
     }
 
     /**
@@ -801,14 +803,15 @@ public class UserService {
      *
      * @param root_private_token Administrator's private_token
      * @param currentUserId      要获取的用户的ID
+     * @param pagination         分页信息，可以为null，默认page=1,per_page=20
      * @return 用户信息
      * @throws Exception
      */
-    public String getCurrentUserForAdmin(String root_private_token, String currentUserId) throws Exception {
+    public String getCurrentUserForAdmin(String root_private_token, String currentUserId, Pagination pagination) throws Exception {
         if (root_private_token == null || "".equals(root_private_token)) {
             return "The root_private_token is required!";
         } else {
-            return userController.getCurrentUsersForAdmin(root_private_token, currentUserId);
+            return userController.getCurrentUsersForAdmin(root_private_token, currentUserId, pagination);
         }
     }
 
@@ -817,14 +820,15 @@ public class UserService {
      * Gets currently authenticated user.
      *
      * @param private_token 获取的用户的private_token
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 返回用户信息
      * @throws Exception
      */
-    public String getCurrentUserForNormalUser(String private_token) throws Exception {
+    public String getCurrentUserForNormalUser(String private_token, Pagination pagination) throws Exception {
         if (private_token == null || "".equals(private_token)) {
             return "The private_token is required!";
         } else {
-            return userController.getCurrentUsersForNormalAccount(private_token);
+            return userController.getCurrentUsersForNormalAccount(private_token, pagination);
         }
     }
 
@@ -832,12 +836,13 @@ public class UserService {
      * 获取所有用户
      *
      * @param private_token 需要提供private_token
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 返回用户集合的json
      * @throws Exception
      */
-    public String getAllUsers(String private_token) throws Exception {
+    public String getAllUsers(String private_token, Pagination pagination) throws Exception {
         if (private_token != null && !"".equals(private_token)) {
-            return userController.getAllUser(private_token);
+            return userController.getAllUser(private_token, pagination);
         } else {
             return "The private_token is required!";
         }

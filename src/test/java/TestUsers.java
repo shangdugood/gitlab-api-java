@@ -20,12 +20,12 @@ public class TestUsers {
 
     @Test
     public void testGetAllUserByAdministrator() throws Exception {
-        System.out.println(userController.getAllUser(Global.root_private_token));
+        System.out.println(userController.getAllUser(Global.root_private_token, null));
     }
 
     @Test
     public void testGetAllUserByRegularAccount() throws Exception {
-        System.out.println(userController.getAllUser(Global.regular_private_token));
+        System.out.println(userController.getAllUser(Global.regular_private_token, null));
     }
 
     @Test
@@ -55,12 +55,12 @@ public class TestUsers {
 
     @Test
     public void testGetCurrentUsersForNormalAccount() throws Exception {
-        System.out.println(userController.getCurrentUsersForNormalAccount(Global.regular_private_token));
+        System.out.println(userController.getCurrentUsersForNormalAccount(Global.regular_private_token, null));
     }
 
     @Test
     public void testGetCurrentUsersForAdmin() throws Exception {
-        System.out.println(userController.getCurrentUsersForAdmin(Global.root_private_token, "24"));
+        System.out.println(userController.getCurrentUsersForAdmin(Global.root_private_token, "24", null));
     }
 
     @Test

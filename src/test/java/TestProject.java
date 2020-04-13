@@ -102,7 +102,7 @@ public class TestProject {
 
     @Test
     public void testGetProjectStarrers() throws Exception {
-        System.out.println(projectController.getProjectStarrers(Global.regular_private_token, "2", ""));
+        System.out.println(projectController.getProjectStarrers(Global.regular_private_token, "2", "", null));
     }
 
     @Test

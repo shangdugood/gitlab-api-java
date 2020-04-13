@@ -530,11 +530,12 @@ public class ProjectService {
      *
      * @param projectId     项目ID或者URL路径
      * @param private_token 管理员或者项目创建者的private_token
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 用户信息的集合
      * @throws Exception
      */
-    public String getProjectStarrers(String projectId, String private_token) throws Exception {
-        return projectController.getProjectStarrers(private_token, projectId, "");
+    public String getProjectStarrers(String projectId, String private_token, Pagination pagination) throws Exception {
+        return projectController.getProjectStarrers(private_token, projectId, "", pagination);
     }
 
     /**
@@ -542,17 +543,18 @@ public class ProjectService {
      *
      * @param projectId       项目ID或者URL路径
      * @param private_token   管理员或者项目创建者的private_token
+     * @param pagination      分页信息，可以为null，默认page=1,per_page=20
      * @param searchCondition 查询条件，包括用户的名称，用户名，邮箱
      * @return 用户信息的集合
      * @throws Exception
      */
-    public String getProjectStarrers(String projectId, String private_token, String searchCondition) throws Exception {
+    public String getProjectStarrers(String projectId, String private_token, String searchCondition, Pagination pagination) throws Exception {
         if (private_token == null || "".equals(private_token)) {
             return "Your private_token is required!";
         } else if (projectId == null || "".equals(projectId)) {
             return "The projectId is required!";
         } else {
-            return projectController.getProjectStarrers(private_token, projectId, searchCondition);
+            return projectController.getProjectStarrers(private_token, projectId, searchCondition, pagination);
         }
     }
 
@@ -776,16 +778,17 @@ public class ProjectService {
      * @param private_token 管理员或者项目创建者的private_token
      * @param search        成员的搜索条件，包括name,username
      * @param skip_users_id 不需要查找的用户的ID
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 用户的集合
      * @throws Exception
      */
-    public String getProjectUsers(String projectId, String private_token, String search, int[] skip_users_id) throws Exception {
+    public String getProjectUsers(String projectId, String private_token, String search, int[] skip_users_id, Pagination pagination) throws Exception {
         if (projectId == null || "".equals(projectId)) {
             return "The projectId is required";
         } else if (private_token == null || "".equals(private_token)) {
             return "Your private_token is required";
         } else {
-            return projectController.getProjectUsers(projectId, private_token, search, skip_users_id);
+            return projectController.getProjectUsers(projectId, private_token, search, skip_users_id, pagination);
         }
 
     }
@@ -796,11 +799,12 @@ public class ProjectService {
      * @param projectId     项目的ID或者URL路径
      * @param private_token 管理员或者项目创建者的private_token
      * @param search        成员的搜索条件，包括name,username
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 用户的集合
      * @throws Exception
      */
-    public String getProjectUsers(String projectId, String private_token, String search) throws Exception {
-        return getProjectUsers(projectId, private_token, search, new int[0]);
+    public String getProjectUsers(String projectId, String private_token, String search, Pagination pagination) throws Exception {
+        return getProjectUsers(projectId, private_token, search, new int[0], pagination);
     }
 
     /**
@@ -809,11 +813,12 @@ public class ProjectService {
      * @param projectId     项目的ID或者URL路径
      * @param private_token 管理员或者项目创建者的private_token
      * @param skip_users_id 不需要查找的用户的ID
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 用户的集合
      * @throws Exception
      */
-    public String getProjectUsers(String projectId, String private_token, int[] skip_users_id) throws Exception {
-        return getProjectUsers(projectId, private_token, "", skip_users_id);
+    public String getProjectUsers(String projectId, String private_token, int[] skip_users_id, Pagination pagination) throws Exception {
+        return getProjectUsers(projectId, private_token, "", skip_users_id, pagination);
     }
 
     /**
@@ -821,11 +826,12 @@ public class ProjectService {
      *
      * @param projectId     项目的ID或者URL路径
      * @param private_token 管理员或者项目创建者的private_token
+     * @param pagination    分页信息，可以为null，默认page=1,per_page=20
      * @return 用户的集合
      * @throws Exception
      */
-    public String getProjectUsers(String projectId, String private_token) throws Exception {
-        return getProjectUsers(projectId, private_token, "", new int[0]);
+    public String getProjectUsers(String projectId, String private_token, Pagination pagination) throws Exception {
+        return getProjectUsers(projectId, private_token, "", new int[0], pagination);
     }
 
 

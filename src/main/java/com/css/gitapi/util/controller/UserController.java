@@ -8,6 +8,7 @@ import com.css.gitapi.util.httputil.HttpDeleteWithBody;
 import com.css.gitapi.util.httputil.HttpGetWithBody;
 import com.css.gitapi.util.model.CreateUserParams;
 import com.css.gitapi.util.model.Global;
+import com.css.gitapi.util.model.Pagination;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -31,10 +32,18 @@ import java.util.List;
  * @date 2020/3/31 10:57
  */
 public class UserController {
-    public static String getAllUser(String private_token) throws Exception {
+    public static String getAllUser(String private_token, Pagination pagination) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users");
+        HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/users");
         httpGet.addHeader("PRIVATE-TOKEN", private_token);
+        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        if (pagination != null) {
+            formparams.add(new BasicNameValuePair("page", pagination.getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", pagination.getPer_page().toString()));
+        }
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
+
+        httpGet.setEntity(entity);
         CloseableHttpResponse response = httpClients.execute(httpGet);
         HttpEntity entity1 = response.getEntity();
         return EntityUtils.toString(entity1);
@@ -181,10 +190,18 @@ public class UserController {
         }
     }
 
-    public String getCurrentUsersForNormalAccount(String private_token) throws Exception {
+    public String getCurrentUsersForNormalAccount(String private_token, Pagination pagination) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/user");
+        HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/user");
         httpGet.addHeader("PRIVATE-TOKEN", private_token);
+        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        if (pagination != null) {
+            formparams.add(new BasicNameValuePair("page", pagination.getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", pagination.getPer_page().toString()));
+        }
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
+
+        httpGet.setEntity(entity);
         CloseableHttpResponse response = httpClients.execute(httpGet);
         HttpEntity entity1 = response.getEntity();
         if (entity1 != null) {
@@ -195,11 +212,16 @@ public class UserController {
     }
 
 
-    public String getCurrentUsersForAdmin(String root_private_token, String currentUserId) throws Exception {
+    public String getCurrentUsersForAdmin(String root_private_token, String currentUserId, Pagination pagination) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/user");
         httpGet.addHeader("PRIVATE-TOKEN", root_private_token);
+
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        if (pagination != null) {
+            formparams.add(new BasicNameValuePair("page", pagination.getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", pagination.getPer_page().toString()));
+        }
         if (currentUserId != null && !"".equals(currentUserId)) {
             formparams.add(new BasicNameValuePair("sudo", currentUserId));
         }
@@ -221,6 +243,7 @@ public class UserController {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/user/status");
         httpGet.addHeader("PRIVATE-TOKEN", private_token);
+
         CloseableHttpResponse response = httpClients.execute(httpGet);
         HttpEntity entity1 = response.getEntity();
         if (entity1 != null) {

@@ -8,9 +8,9 @@ import com.css.gitapi.util.enums.Visibility;
 /**
  * @author shangdu
  * @version 1.0
- * @date 2020/3/31 15:31
+ * @date 2020/4/9 15:01
  */
-public class ListProjectParams {
+public class ListGroupProjectParams {
     /**
      * Limit by archived status
      */
@@ -44,21 +44,9 @@ public class ListProjectParams {
      */
     private boolean owned;
     /**
-     * Limit by projects that the current user is a member of
-     */
-    private boolean membership;
-    /**
      * Limit by projects starred by the current user
      */
     private boolean starred;
-    /**
-     * Include project statistics
-     */
-    private boolean statistics;
-    /**
-     * Include custom attributes in response (admins only)
-     */
-    private boolean with_custom_attributes;
     /**
      * Limit by enabled issues feature
      */
@@ -68,29 +56,23 @@ public class ListProjectParams {
      */
     private boolean with_merge_requests_enabled;
     /**
-     * Limit by projects which use the given programming language
+     * Include projects shared to this group.
+     * Default is true
      */
-    private String with_programming_language;
+    private boolean with_shared = true;
     /**
-     * Limit projects where the wiki checksum calculation has failed
+     * Include projects in subgroups of this group.
+     * Default is false
      */
-    private boolean wiki_checksum_failed;
-    /**
-     * Limit projects where the repository checksum calculation has failed
-     */
-    private boolean repository_checksum_failed;
+    private boolean include_subgroups = false;
     /**
      * Limit by current user minimal access level
      */
     private UserAccessLevel min_access_level;
     /**
-     * Limit results to projects with IDs greater than the specified ID
+     * Include custom attributes in response (admins only)
      */
-    private Integer id_after;
-    /**
-     * Limit results to projects with IDs less than the specified ID
-     */
-    private Integer id_before;
+    private boolean with_custom_attributes;
     /**
      * 分页信息，可选，默认为page=1,per_page=20;
      */
@@ -102,18 +84,6 @@ public class ListProjectParams {
 
     public void setPagination(Pagination pagination) {
         this.pagination = pagination;
-    }
-
-
-    public ListProjectParams() {
-        this.visibility = Visibility.NONE;
-        this.order_by = ProListOrderBy.CREATED_TIME;
-        this.sort = SortMethod.DESC;
-        this.min_access_level = UserAccessLevel.NONE;
-        this.simple = true;
-        this.id_after = null;
-        this.id_before = null;
-
     }
 
     public boolean isArchived() {
@@ -172,36 +142,12 @@ public class ListProjectParams {
         this.owned = owned;
     }
 
-    public boolean isMembership() {
-        return membership;
-    }
-
-    public void setMembership(boolean membership) {
-        this.membership = membership;
-    }
-
     public boolean isStarred() {
         return starred;
     }
 
     public void setStarred(boolean starred) {
         this.starred = starred;
-    }
-
-    public boolean isStatistics() {
-        return statistics;
-    }
-
-    public void setStatistics(boolean statistics) {
-        this.statistics = statistics;
-    }
-
-    public boolean isWith_custom_attributes() {
-        return with_custom_attributes;
-    }
-
-    public void setWith_custom_attributes(boolean with_custom_attributes) {
-        this.with_custom_attributes = with_custom_attributes;
     }
 
     public boolean isWith_issues_enabled() {
@@ -220,28 +166,20 @@ public class ListProjectParams {
         this.with_merge_requests_enabled = with_merge_requests_enabled;
     }
 
-    public String getWith_programming_language() {
-        return with_programming_language;
+    public boolean isWith_shared() {
+        return with_shared;
     }
 
-    public void setWith_programming_language(String with_programming_language) {
-        this.with_programming_language = with_programming_language;
+    public void setWith_shared(boolean with_shared) {
+        this.with_shared = with_shared;
     }
 
-    public boolean isWiki_checksum_failed() {
-        return wiki_checksum_failed;
+    public boolean isInclude_subgroups() {
+        return include_subgroups;
     }
 
-    public void setWiki_checksum_failed(boolean wiki_checksum_failed) {
-        this.wiki_checksum_failed = wiki_checksum_failed;
-    }
-
-    public boolean isRepository_checksum_failed() {
-        return repository_checksum_failed;
-    }
-
-    public void setRepository_checksum_failed(boolean repository_checksum_failed) {
-        this.repository_checksum_failed = repository_checksum_failed;
+    public void setInclude_subgroups(boolean include_subgroups) {
+        this.include_subgroups = include_subgroups;
     }
 
     public UserAccessLevel getMin_access_level() {
@@ -252,19 +190,11 @@ public class ListProjectParams {
         this.min_access_level = min_access_level;
     }
 
-    public Integer getId_after() {
-        return id_after;
+    public boolean isWith_custom_attributes() {
+        return with_custom_attributes;
     }
 
-    public void setId_after(Integer id_after) {
-        this.id_after = id_after;
-    }
-
-    public Integer getId_before() {
-        return id_before;
-    }
-
-    public void setId_before(Integer id_before) {
-        this.id_before = id_before;
+    public void setWith_custom_attributes(boolean with_custom_attributes) {
+        this.with_custom_attributes = with_custom_attributes;
     }
 }

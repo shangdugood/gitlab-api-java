@@ -52,6 +52,10 @@ public class ProjectController {
         formparams.add(new BasicNameValuePair("with_programming_language", params.getWith_programming_language()));
         formparams.add(new BasicNameValuePair("wiki_checksum_failed", String.valueOf(params.isWiki_checksum_failed())));
         formparams.add(new BasicNameValuePair("repository_checksum_failed", String.valueOf(params.isRepository_checksum_failed())));
+        if (params.getPagination() != null) {
+            formparams.add(new BasicNameValuePair("page", params.getPagination().getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", params.getPagination().getPer_page().toString()));
+        }
         if (params.getVisibility().getDesc() != null) {
             formparams.add(new BasicNameValuePair("visibility", params.getVisibility().getDesc()));
         }
@@ -93,6 +97,10 @@ public class ProjectController {
         formparams.add(new BasicNameValuePair("with_programming_language", params.getWith_programming_language()));
         formparams.add(new BasicNameValuePair("wiki_checksum_failed", String.valueOf(params.isWiki_checksum_failed())));
         formparams.add(new BasicNameValuePair("repository_checksum_failed", String.valueOf(params.isRepository_checksum_failed())));
+        if (params.getPagination() != null) {
+            formparams.add(new BasicNameValuePair("page", params.getPagination().getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", params.getPagination().getPer_page().toString()));
+        }
         if (params.getVisibility().getDesc() != null) {
             formparams.add(new BasicNameValuePair("visibility", params.getVisibility().getDesc()));
         }
@@ -134,6 +142,10 @@ public class ProjectController {
         formparams.add(new BasicNameValuePair("with_programming_language", params.getWith_programming_language()));
         formparams.add(new BasicNameValuePair("wiki_checksum_failed", String.valueOf(params.isWiki_checksum_failed())));
         formparams.add(new BasicNameValuePair("repository_checksum_failed", String.valueOf(params.isRepository_checksum_failed())));
+        if (params.getPagination() != null) {
+            formparams.add(new BasicNameValuePair("page", params.getPagination().getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", params.getPagination().getPer_page().toString()));
+        }
         if (params.getVisibility().getDesc() != null) {
             formparams.add(new BasicNameValuePair("visibility", params.getVisibility().getDesc()));
         }
@@ -169,11 +181,15 @@ public class ProjectController {
         return EntityUtils.toString(entity1);
     }
 
-    public String getProjectUsers(String projectId, String private_token, String search, int[] skip_users_id) throws Exception {
+    public String getProjectUsers(String projectId, String private_token, String search, int[] skip_users_id, Pagination pagination) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/users");
         httpGet.addHeader("PRIVATE-TOKEN", private_token);
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        if (pagination != null) {
+            formparams.add(new BasicNameValuePair("page", pagination.getPage().toString()));
+            formparams.add(new BasicNameValuePair("per_page", pagination.getPer_page().toString()));
+        }
         if (!"".equals(search)) {
             formparams.add(new BasicNameValuePair("search", search));
         }
@@ -552,6 +568,10 @@ public class ProjectController {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("id", project.getId()));
+        if (project.getPagination() != null) {
+            params.add(new BasicNameValuePair("page", project.getPagination().getPage().toString()));
+            params.add(new BasicNameValuePair("per_page", project.getPagination().getPer_page().toString()));
+        }
         if (project.getVisibility() != null) {
             params.add(new BasicNameValuePair("visibility", project.getVisibility().getDesc()));
         }
@@ -610,11 +630,15 @@ public class ProjectController {
         }
     }
 
-    public String getProjectStarrers(String private_token, String projectId, String searchCondition) throws Exception {
+    public String getProjectStarrers(String private_token, String projectId, String searchCondition, Pagination pagination) throws Exception {
         CloseableHttpClient httpClients = HttpClients.createDefault();
         HttpGetWithBody httpGet = new HttpGetWithBody("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/projects/" + projectId + "/starrers");
         httpGet.addHeader("PRIVATE-TOKEN", private_token);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
+        if (pagination != null) {
+            params.add(new BasicNameValuePair("page", pagination.getPage().toString()));
+            params.add(new BasicNameValuePair("per_page", pagination.getPer_page().toString()));
+        }
         if (searchCondition != null && !"".equals(searchCondition)) {
             params.add(new BasicNameValuePair("search", searchCondition));
         }
