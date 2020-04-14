@@ -1,5 +1,6 @@
 package com.css.gitapi.util.controller;
 
+import com.css.gitapi.util.enums.HttpCode;
 import com.css.gitapi.util.httputil.HttpGetWithBody;
 import com.css.gitapi.util.httputil.ResponseGetPageTools;
 import com.css.gitapi.util.model.*;
@@ -250,8 +251,13 @@ public class GroupController {
         HttpDelete httpDelete = new HttpDelete("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/groups/" + group_id);
         httpDelete.addHeader("PRIVATE-TOKEN", private_token);
         CloseableHttpResponse response = httpClients.execute(httpDelete);
-        HttpEntity entity1 = response.getEntity();
-        return EntityUtils.toString(entity1);
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return Global.getPorpties("delGroupSuccess");
+        } else if (response.getEntity() != null) {
+            return EntityUtils.toString(response.getEntity());
+        } else {
+            return response.getStatusLine().getStatusCode() + ".";
+        }
     }
 
     public String searchGroup(String private_token, String key_words) throws Exception {
@@ -348,8 +354,13 @@ public class GroupController {
         HttpDelete httpDelete = new HttpDelete("http://" + Global.gitIP + ":" + Global.gitPort + "/api/v4/groups/" + group_id + "/hooks/" + hook_id);
         httpDelete.addHeader("PRIVATE-TOKEN", private_token);
         CloseableHttpResponse response = httpClients.execute(httpDelete);
-        HttpEntity entity1 = response.getEntity();
-        return EntityUtils.toString(entity1);
+        if (response.getStatusLine().getStatusCode() == HttpCode.DELETESUCCESS.getCode()) {
+            return Global.getPorpties("delGroupHookSuccess");
+        } else if (response.getEntity() != null) {
+            return EntityUtils.toString(response.getEntity());
+        } else {
+            return response.getStatusLine().getStatusCode() + ".";
+        }
     }
 
 }

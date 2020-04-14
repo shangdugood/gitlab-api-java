@@ -23,6 +23,7 @@ public class GroupService {
      * @throws Exception
      */
     public String modifyGroupHook(String private_token, String group_id, Integer hook_id) throws Exception {
+
         if (private_token == null || "".equals(private_token)) {
             return "The private_token is required.";
         } else if (group_id == null || "".equals(group_id)) {
