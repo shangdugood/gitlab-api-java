@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="git-api-demo:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/git_api_demo_jar</output-path>
+    <root id="archive" name="git-api-demo.jar">
+      <element id="module-output" name="git-api-demo" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/jetbrains/annotations-java5/19.0.0/annotations-java5-19.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/junit/junit/4.12/junit-4.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/com/alibaba/fastjson/1.2.59/fastjson-1.2.59.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpclient/4.5.4/httpclient-4.5.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/apache/httpcomponents/fluent-hc/4.5.4/fluent-hc-4.5.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpcore/4.4.7/httpcore-4.4.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpmime/4.5.4/httpmime-4.5.4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
